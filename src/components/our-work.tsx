@@ -46,7 +46,7 @@ const projects = [
     bgColor: "from-purple-900/20 to-pink-900/20",
     liveUrl: "#"
   },
-  {
+ /* {
     id: 4,
     title: "HealthCare AI",
     description: "Revolutionary healthcare management system with predictive analytics and patient care optimization",
@@ -81,7 +81,7 @@ const projects = [
     color: "from-orange-500 to-red-500",
     bgColor: "from-orange-900/20 to-red-900/20",
     liveUrl: "#"
-  }
+  }*/
 ];
 
 // Memoized project card
