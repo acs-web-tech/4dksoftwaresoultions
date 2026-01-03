@@ -216,7 +216,7 @@ export const Navbar = memo(() => {
                 <img
                   src="public/img/logo.jpeg"
                   alt="4DK Teams Logo"
-                  className="w-10"
+                  className="h-10 w-10 rounded-full object-cover"
                   loading="eager"
                   width={40}
                   height={40}

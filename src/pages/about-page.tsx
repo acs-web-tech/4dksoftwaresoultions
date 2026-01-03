@@ -4,8 +4,9 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Sparkles, Target, Rocket, Users, Heart, Zap, Award, Globe } from "lucide-react";
 import { getAnimationSettings } from "@/lib/performance";
 import { useTheme } from "@/context/ThemeContext";
-import { cn } from "@/lib/utils";
+import { change, cn } from "@/lib/utils";
 import { COMPANY } from "@/constants";
+import { Link } from "react-router-dom";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -404,9 +405,10 @@ const AboutPage = memo(() => {
             Partner with {COMPANY.name} and experience development excellence like never before
           </p>
 
-          <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold py-4 px-10 rounded-full text-lg shadow-xl transition-transform duration-200 active:scale-95">
-            Start Your Journey
-          </button>
+          <Link to="/contact" className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold py-4 px-10 rounded-full text-lg shadow-xl transition-transform duration-200 active:scale-95">
+            Start Your Journey 
+
+          </Link>
 
           {/* Feature highlights */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-16">
