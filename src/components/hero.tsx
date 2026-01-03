@@ -28,7 +28,7 @@ const LoadingSpinner = memo(({ isDark }: { isDark: boolean }) => (
 LoadingSpinner.displayName = "LoadingSpinner";
 
 export const Hero = memo(() => {
-  const [currentIndex, setCurrentIndex] = useState(1);
+  const [currentIndex, _] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const [loadedVideos, setLoadedVideos] = useState(0);
   const [isMobileDevice, setIsMobileDevice] = useState(false);
