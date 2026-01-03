@@ -1,4 +1,3 @@
-import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/all";
 import { useCallback, useEffect, useRef, useState, memo } from "react";
@@ -30,17 +29,16 @@ LoadingSpinner.displayName = "LoadingSpinner";
 
 export const Hero = memo(() => {
   const [currentIndex, setCurrentIndex] = useState(1);
-  const [hasClicked, setHasClicked] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [loadedVideos, setLoadedVideos] = useState(0);
   const [isMobileDevice, setIsMobileDevice] = useState(false);
 
   const nextVideoRef = useRef<HTMLVideoElement>(null);
   const mainVideoRef = useRef<HTMLVideoElement>(null);
-  const animationRef = useRef<gsap.core.Timeline | null>(null);
+  
 
   const totalVideos = 4;
-  const upcomingVideoIndex = (currentIndex % totalVideos) + 1;
+  
   const animSettings = getAnimationSettings();
   const { isDark } = useTheme();
 
@@ -55,11 +53,7 @@ export const Hero = memo(() => {
     return VIDEO_LINKS[key];
   }, []);
 
-  const handleMiniVideoClick = useCallback(() => {
-    if (!animSettings.shouldAnimate) return;
-    setHasClicked(true);
-    setCurrentIndex(upcomingVideoIndex);
-  }, [upcomingVideoIndex, animSettings.shouldAnimate]);
+
 
   const handleVideoLoad = useCallback(() => {
     setLoadedVideos((prev) => prev + 1);

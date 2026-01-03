@@ -4,7 +4,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Sparkles, Target, Rocket, Users, Heart, Zap, Award, Globe } from "lucide-react";
 import { getAnimationSettings } from "@/lib/performance";
 import { useTheme } from "@/context/ThemeContext";
-import { change, cn } from "@/lib/utils";
+import {  cn } from "@/lib/utils";
 import { COMPANY } from "@/constants";
 import { Link } from "react-router-dom";
 
