@@ -214,7 +214,7 @@ export const Navbar = memo(() => {
                 onClick={closeMobileMenu}
               >
                 <img
-                  src="public/img/logo.jpeg"
+                  src="img/logo.jpeg"
                   alt="4DK Teams Logo"
                   className="h-10 w-10 rounded-full object-cover"
                   loading="eager"
