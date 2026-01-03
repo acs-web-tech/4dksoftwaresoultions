@@ -12,7 +12,7 @@ export const Footer = () => {
     )}>
       <div className="container mx-auto flex flex-col items-center justify-between gap-4 px-8 md:flex-row">
         <p className="text-center text-sm md:text-left">
-          &copy; <strong className="font-semibold">{COMPANY.name}</strong>{" "}
+          &copy; <strong className="font-semibold">4DK Software Solutions</strong>{" "}
           {new Date().getFullYear()}. All rights reserved.
         </p>
 

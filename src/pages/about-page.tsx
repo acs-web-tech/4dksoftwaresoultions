@@ -12,36 +12,36 @@ gsap.registerPlugin(ScrollTrigger);
 const teamMembers = [
   {
     id: 1,
-    name: "Alex Chen",
-    role: "CEO & Founder",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=500&fit=crop&crop=face&q=75",
+    name: "ARUN",
+    role: "Founder",
+    image: "img/Founder.jpg",
     bio: "Visionary leader with 10+ years in the tech industry, passionate about creating innovative digital solutions.",
     icon: Rocket,
     color: "from-purple-400 to-pink-400"
   },
   {
     id: 2,
-    name: "Sarah Johnson",
-    role: "CTO",
-    image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400&h=500&fit=crop&crop=face&q=75",
+    name: "DHATCHINA MOORTHY",
+    role: "Co-Founder",
+    image: "img/Co-founder.jpg",
     bio: "Tech innovator specializing in modern web technologies and scalable architecture design.",
     icon: Zap,
     color: "from-blue-400 to-cyan-400"
   },
   {
     id: 3,
-    name: "Marcus Rivera",
-    role: "Creative Director",
-    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=500&fit=crop&crop=face&q=75",
+    name: "ABURAJA",
+    role: "CEO",
+    image: "img/CEO.jpg",
     bio: "Award-winning designer crafting next-gen digital experiences with artistry and innovation.",
     icon: Award,
     color: "from-emerald-400 to-teal-400"
   },
   {
-    id: 4,
-    name: "Emma Thompson",
+    id: 4,  
+    name: "KARTHIGAI SELVAM",
     role: "Head of Operations",
-    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=500&fit=crop&crop=face&q=75",
+    image: "img/karthi.jpg",
     bio: "Operations expert connecting clients with optimal solutions and ensuring project success.",
     icon: Users,
     color: "from-orange-400 to-red-400"
