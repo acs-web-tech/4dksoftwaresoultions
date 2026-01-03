@@ -455,12 +455,12 @@ const PricingPage = memo(() => {
             </div>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <a
-                href="/contact"
+              <Link
+                to="/contact"
                 className="bg-gradient-to-r from-emerald-400 to-blue-500 text-black font-bold py-4 px-10 rounded-full text-lg transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-emerald-400/50"
               >
                 Request a Custom Quote
-              </a>
+              </Link>
               <p className={cn(
                 "text-sm max-w-xs",
                 isDark ? "text-gray-400" : "text-gray-500"
