@@ -9,6 +9,7 @@ import {
 
 import { AnimatedTitle } from "./animated-title";
 import { getAnimationSettings } from "@/lib/performance";
+import { hash } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -399,7 +400,9 @@ export const DevelopmentProcess = memo(() => {
                 <div className="text-center mt-24">
                     <div className="inline-flex flex-col items-center gap-6">
                         <p className="text-gray-400 text-lg">Ready to start your project?</p>
-                        <button className="group relative inline-flex items-center gap-3 bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white px-10 py-5 rounded-full font-bold text-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-violet-500/30">
+                        <button
+                        onClick={()=>hash("contact")}
+                        className="group relative inline-flex items-center gap-3 bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white px-10 py-5 rounded-full font-bold text-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-violet-500/30">
                             {/* Shine effect */}
                             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
                             <span className="relative">Start Your Journey</span>

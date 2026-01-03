@@ -51,7 +51,7 @@ export const About = memo(() => {
       "min-h-screen w-screen",
       isDark ? "bg-black" : "bg-gray-50"
     )}>
-      <div className="relative mb-8 mt-36 flex flex-col items-center gap-5">
+      <div className="relative mb-8 mt-30 flex flex-col items-center gap-5">
         <p className={cn(
           "font-general text-sm uppercase md:text-[10px]",
           isDark ? "text-gray-400" : "text-gray-500"

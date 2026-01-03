@@ -8,7 +8,7 @@ import { Button } from "./button";
 import { VIDEO_LINKS, COMPANY } from "@/constants";
 import { getAnimationSettings, isMobile } from "@/lib/performance";
 import { useTheme } from "@/context/ThemeContext";
-import { cn } from "@/lib/utils";
+import { cn, hash } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -89,69 +89,69 @@ export const Hero = memo(() => {
     return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
   }, [isLoading]);
 
-  useGSAP(
-    () => {
-      if (!animSettings.shouldAnimate) return;
+  // useGSAP(
+  //   () => {
+  //     if (!animSettings.shouldAnimate) return;
 
-      if (hasClicked) {
-        // Kill previous animation if exists
-        animationRef.current?.kill();
+  //     if (hasClicked) {
+  //       // Kill previous animation if exists
+  //       animationRef.current?.kill();
 
-        gsap.set("#next-video", { visibility: "visible" });
+  //       gsap.set("#next-video", { visibility: "visible" });
 
-        animationRef.current = gsap.timeline();
-        animationRef.current
-          .to("#next-video", {
-            transformOrigin: "center center",
-            scale: 1,
-            width: "100%",
-            height: "100%",
-            duration: 0.8, // Reduced duration
-            ease: "power1.inOut",
-            onStart: () => {
-              void nextVideoRef.current?.play();
-            },
-          })
-          .from(
-            "#current-video",
-            {
-              transformOrigin: "center center",
-              scale: 0,
-              duration: 1.2, // Reduced
-              ease: "power1.inOut",
-            },
-            "<"
-          );
-      }
-    },
-    { dependencies: [currentIndex], revertOnUpdate: true }
-  );
+  //       animationRef.current = gsap.timeline();
+  //       animationRef.current
+  //         .to("#next-video", {
+  //           transformOrigin: "center center",
+  //           scale: 1,
+  //           width: "100%",
+  //           height: "100%",
+  //           duration: 0.8, // Reduced duration
+  //           ease: "power1.inOut",
+  //           onStart: () => {
+  //             void nextVideoRef.current?.play();
+  //           },
+  //         })
+  //         .from(
+  //           "#current-video",
+  //           {
+  //             transformOrigin: "center center",
+  //             scale: 0,
+  //             duration: 1.2, // Reduced
+  //             ease: "power1.inOut",
+  //           },
+  //           "<"
+  //         );
+  //     }
+  //   },
+  //   { dependencies: [currentIndex], revertOnUpdate: true }
+  // );
 
-  useGSAP(() => {
-    if (!animSettings.shouldAnimate) return;
+  // useGSAP(() => {
+  //   if (!animSettings.shouldAnimate) return;
 
-    gsap.set("#video-frame", {
-      clipPath: "polygon(14% 0%, 72% 0%, 90% 90%, 0% 100%)",
-      borderRadius: "0 0 40% 10%",
-    });
+  //   gsap.set("#video-frame", {
+  //     clipPath: "polygon(14% 0%, 72% 0%, 90% 90%, 0% 100%)",
+  //     borderRadius: "0 0 40% 10%",
+  //   });
 
-    ScrollTrigger.create({
-      trigger: "#video-frame",
-      start: "center center",
-      end: "bottom center",
-      scrub: 0.5, // Added scrub value for smoother animation
-      onUpdate: (self) => {
-        const progress = self.progress;
-        const clipPath = `polygon(${14 - 14 * progress}% 0%, ${72 + 28 * progress}% 0%, ${90 + 10 * progress}% ${90 + 10 * progress}%, 0% 100%)`;
-        const borderRadius = `0 0 ${40 - 40 * progress}% ${10 - 10 * progress}%`;
-        gsap.set("#video-frame", { clipPath, borderRadius });
-      },
-    });
+  //   ScrollTrigger.create({
+  //     trigger: "#video-frame",
+  //     start: "center center",
+  //     end: "bottom center",
+  //     scrub: 0.5, // Added scrub value for smoother animation
+  //     onUpdate: (self) => {
+  //       const progress = self.progress;
+  //       const clipPath = `polygon(${14 - 14 * progress}% 0%, ${72 + 28 * progress}% 0%, ${90 + 10 * progress}% ${90 + 10 * progress}%, 0% 100%)`;
+  //       const borderRadius = `0 0 ${40 - 40 * progress}% ${10 - 10 * progress}%`;
+  //       gsap.set("#video-frame", { clipPath, borderRadius });
+  //     },
+  //   });
 
-    return () => {
-      ScrollTrigger.getAll().forEach((st) => st.kill());
-    };
-  });
+  //   return () => {
+  //     ScrollTrigger.getAll().forEach((st) => st.kill());
+  //   };
+  // });
 
   return (
     <section id="hero" className="relative h-dvh w-screen overflow-x-hidden">
@@ -166,7 +166,7 @@ export const Hero = memo(() => {
       >
         <div>
           {/* Mini video - only show on desktop */}
-          {!isMobileDevice && animSettings.enableHoverEffects && (
+          {/* {!isMobileDevice && animSettings.enableHoverEffects && (
             <div className="mask-clip-path absolute-center absolute z-50 size-64 cursor-pointer overflow-hidden rounded-lg">
               <div
                 onClick={handleMiniVideoClick}
@@ -185,7 +185,7 @@ export const Hero = memo(() => {
                 />
               </div>
             </div>
-          )}
+          )} */}
 
           {/* Next video - only on desktop */}
           {!isMobileDevice && (
@@ -244,6 +244,7 @@ export const Hero = memo(() => {
             <Button
               id="watch-trailer"
               leftIcon={TiLocationArrow}
+              onClick={()=>hash("ourwork")}
               containerClass="bg-gradient-to-r from-yellow-400 to-orange-400 flex-center gap-1 text-black"
             >
               Our Portfolio
