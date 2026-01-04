@@ -5,7 +5,7 @@ import { useRef, memo, useEffect, useState } from "react";
 import { ExternalLink, Play, Award, Zap, Users, Globe } from "lucide-react";
 import { getAnimationSettings, isMobile } from "@/lib/performance";
 import { useTheme } from "@/context/ThemeContext";
-import { cn } from "@/lib/utils";
+import { cn, hash } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger, TextPlugin);
 
@@ -46,7 +46,7 @@ const projects = [
     bgColor: "from-purple-900/20 to-pink-900/20",
     liveUrl: "#"
   },
-  {
+ /* {
     id: 4,
     title: "HealthCare AI",
     description: "Revolutionary healthcare management system with predictive analytics and patient care optimization",
@@ -81,7 +81,7 @@ const projects = [
     color: "from-orange-500 to-red-500",
     bgColor: "from-orange-900/20 to-red-900/20",
     liveUrl: "#"
-  }
+  }*/
 ];
 
 // Memoized project card
@@ -140,6 +140,7 @@ const ProjectCard = memo(({
   return (
     <div
       ref={cardRef}
+      id="ourwork"
       className={cn(
         "project-card group relative rounded-3xl overflow-hidden border shadow-xl will-change-transform",
         isDark
@@ -310,7 +311,7 @@ export const OurWork = memo(() => {
   }, [animSettings.shouldAnimate]);
 
   return (
-    <section id="our-work" className={cn(
+    <section  className={cn(
       "relative min-h-screen w-screen overflow-hidden py-20",
       isDark ? "bg-black" : "bg-gray-50"
     )}>
@@ -340,7 +341,7 @@ export const OurWork = memo(() => {
         </>
       )}
 
-      <div ref={containerRef} className="relative z-10 container mx-auto px-4">
+      <div ref={containerRef}  id="ourwork" className="relative z-10 container mx-auto px-4">
         {/* Hero Section */}
         <div className="text-center mb-16">
           <div id="work-hero-badge" className={cn(
@@ -393,7 +394,9 @@ export const OurWork = memo(() => {
             )}>
               Ready to Create Something Amazing?
             </h3>
-            <button className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-10 py-3.5 rounded-full font-bold text-lg transition-transform duration-200 active:scale-95 shadow-xl">
+            <button 
+            onClick={()=>hash("contact")}
+            className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-10 py-3.5 rounded-full font-bold text-lg transition-transform duration-200 active:scale-95 shadow-xl">
               Start Your Project
             </button>
           </div>

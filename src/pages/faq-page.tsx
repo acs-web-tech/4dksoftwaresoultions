@@ -5,6 +5,7 @@ import { ChevronDown, Sparkles, MessageCircle, Zap, Shield, Globe, Users, Rocket
 import { useTheme } from "@/context/ThemeContext";
 import { cn } from "@/lib/utils";
 import { COMPANY } from "@/constants";
+import { Link } from "react-router-dom";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -297,14 +298,14 @@ const FaqPage = memo(() => {
             <button className="hero-btn bg-gradient-to-r from-purple-500 to-blue-500 text-white font-bold py-4 px-8 rounded-full text-lg transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/50">
               View All FAQs
             </button>
-            <button className={cn(
+            <Link to={"/contact"} className={cn(
               "hero-btn border-2 font-semibold py-4 px-8 rounded-full text-lg transition-all",
               isDark
                 ? "border-white/20 hover:border-white/40 text-white hover:bg-white/5"
                 : "border-gray-300 hover:border-gray-400 text-gray-700 hover:bg-gray-100"
             )}>
               Contact Support
-            </button>
+            </Link>
           </div>
 
           <div className={cn(
@@ -450,9 +451,9 @@ const FaqPage = memo(() => {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
-            <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold py-5 px-10 rounded-full text-xl transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-yellow-500/50">
+            <Link to={"/contact"} className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold py-5 px-10 rounded-full text-xl transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-yellow-500/50">
               Talk to Our Team
-            </button>
+            </Link>
             <button
               onClick={scrollToTop}
               className={cn(

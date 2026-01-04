@@ -3,6 +3,7 @@ import { ChevronDown, Check, Zap, Shield, Users, TrendingUp, Star, Sparkles } fr
 import { useTheme } from "@/context/ThemeContext";
 import { cn } from "@/lib/utils";
 import { COMPANY } from "@/constants";
+import { Link } from "react-router-dom";
 
 const tiers = [
   {
@@ -454,12 +455,12 @@ const PricingPage = memo(() => {
             </div>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <a
-                href="/contact"
+              <Link
+                to="/contact"
                 className="bg-gradient-to-r from-emerald-400 to-blue-500 text-black font-bold py-4 px-10 rounded-full text-lg transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-emerald-400/50"
               >
                 Request a Custom Quote
-              </a>
+              </Link>
               <p className={cn(
                 "text-sm max-w-xs",
                 isDark ? "text-gray-400" : "text-gray-500"
@@ -495,9 +496,9 @@ const PricingPage = memo(() => {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold py-5 px-10 rounded-full text-xl transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-yellow-500/50">
+            <Link to={"/contact"} className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold py-5 px-10 rounded-full text-xl transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-yellow-500/50">
               Get Started Today
-            </button>
+            </Link>
             <button className={cn(
               "border-2 font-semibold py-5 px-10 rounded-full text-xl transition-all",
               isDark

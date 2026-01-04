@@ -7,83 +7,49 @@ import { Star, Quote, Sparkles, ArrowRight, ChevronLeft, ChevronRight, Play } fr
 import { AnimatedTitle } from "./animated-title";
 import { getAnimationSettings } from "@/lib/performance";
 import { useTheme } from "@/context/ThemeContext";
-import { cn } from "@/lib/utils";
+import { cn, hash } from "@/lib/utils";
 import { COMPANY } from "@/constants";
-
+import DURAI from "../client/DuraiPandiyan.jpeg"
+import REKESH from "../client/RekeshKumar.jpeg"
+import RAMESH from "../client/Ramesh.G.jpg"
 gsap.registerPlugin(ScrollTrigger);
 
 const testimonials = [
     {
         id: 1,
-        name: "Sarah Johnson",
-        position: "CEO",
-        company: "TechStart Inc.",
-        image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop&crop=face&q=80",
+        name: "Durai Pandiyan",
+        position: "Manager",
+        company: "ATHER SHOWROOM",
+        image: DURAI,
         rating: 5,
-        text: "Working with this development team was an absolute game-changer for our business. They delivered a stunning e-commerce platform that exceeded all our expectations. The attention to detail and commitment to quality is unmatched.",
-        highlight: "Revenue increased by 340%",
+        text: "Working with this development team was an absolute game-changer for our business. They delivered a stunning Customer Service platform that exceeded all our expectations. The attention to detail and commitment to quality is unmatched.Customer Service is very important in EV Market 4DK helped us to do it in a Smarter Way Now we are Ahead of the competitors",
+        highlight: "Revenue increased by 40%",
         gradient: "from-violet-500 to-fuchsia-500",
         bgGlow: "violet"
     },
     {
         id: 2,
-        name: "Michael Chen",
+        name: "Rekesh Kumar",
         position: "CTO",
-        company: "InnovateLab",
-        image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face&q=80",
+        company: "GTK Construction",
+        image: REKESH,
         rating: 5,
         text: "The mobile app they developed for us has revolutionized how our customers interact with our services. The user experience is seamless and the performance is outstanding. Highly recommend their services!",
-        highlight: "5M+ app downloads",
+        highlight: "Good User Experience",
         gradient: "from-blue-500 to-cyan-500",
         bgGlow: "blue"
     },
     {
         id: 3,
-        name: "Emily Rodriguez",
-        position: "Founder",
-        company: "HealthTech Solutions",
-        image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop&crop=face&q=80",
+        name: "Ramesh Namasivayam",
+        position: "Director",
+        company: "LOP CLINIC",
+        image: RAMESH,
         rating: 5,
         text: "Their expertise in healthcare technology is remarkable. They built a comprehensive patient management system that has streamlined our operations and improved patient satisfaction significantly.",
         highlight: "40% efficiency boost",
         gradient: "from-emerald-500 to-teal-500",
         bgGlow: "emerald"
-    },
-    {
-        id: 4,
-        name: "David Thompson",
-        position: "Marketing Director",
-        company: "GrowthCorp",
-        image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face&q=80",
-        rating: 5,
-        text: "The AI-powered analytics dashboard they created has transformed how we make data-driven decisions. Real-time insights, beautiful visualizations, and incredible performance. Worth every penny!",
-        highlight: "200% ROI in 6 months",
-        gradient: "from-orange-500 to-amber-500",
-        bgGlow: "orange"
-    },
-    {
-        id: 5,
-        name: "Lisa Wang",
-        position: "Product Manager",
-        company: "FutureTech",
-        image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=200&fit=crop&crop=face&q=80",
-        rating: 5,
-        text: "From concept to deployment, their team was professional, communicative, and delivered exceptional results. They truly understand modern web development and user experience design.",
-        highlight: "Launched in 8 weeks",
-        gradient: "from-indigo-500 to-purple-500",
-        bgGlow: "indigo"
-    },
-    {
-        id: 6,
-        name: "James Miller",
-        position: "Operations Manager",
-        company: "LogiFlow",
-        image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=face&q=80",
-        rating: 5,
-        text: "The logistics management system they developed has optimized our entire supply chain. Real-time tracking, automated workflows, and excellent customer support. A true partner in innovation.",
-        highlight: "30% cost reduction",
-        gradient: "from-pink-500 to-rose-500",
-        bgGlow: "pink"
     }
 ];
 
@@ -525,7 +491,9 @@ export const Testimonials = memo(() => {
                         <p className={isDark ? "text-gray-400 text-lg" : "text-gray-500 text-lg"}>
                             Ready to become our next success story?
                         </p>
-                        <button className="group relative inline-flex items-center gap-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-black px-10 py-5 rounded-full font-bold text-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-yellow-500/30">
+                        <button 
+                        onClick={()=>hash("contact")}
+                        className="group relative inline-flex items-center gap-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-black px-10 py-5 rounded-full font-bold text-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-yellow-500/30">
                             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
                             <span className="relative">Start Your Project Today</span>
                             <ArrowRight className="relative w-5 h-5 group-hover:translate-x-1 transition-transform" />

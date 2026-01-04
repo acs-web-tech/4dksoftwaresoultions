@@ -1,3 +1,4 @@
+import { SOCIAL_LINKS } from "@/constants";
 import { Link } from "react-router-dom";
 import { SOCIAL_LINKS, COMPANY } from "@/constants";
 import { useTheme } from "@/context/ThemeContext";
