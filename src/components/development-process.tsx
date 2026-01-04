@@ -482,6 +482,7 @@ export const DevelopmentProcess = memo(() => {
                         <p className={isDark ? "text-gray-400 text-lg" : "text-gray-500 text-lg"}>
                             Ready to start your project with {COMPANY.name}?
                         </p>
+                        </button>
                         <button className="group relative inline-flex items-center gap-3 bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white px-10 py-5 rounded-full font-bold text-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-violet-500/30">
                             {/* Shine effect */}
                             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />

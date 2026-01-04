@@ -1,6 +1,6 @@
 import { SOCIAL_LINKS } from "@/constants";
 import { Link } from "react-router-dom";
-import { SOCIAL_LINKS, COMPANY } from "@/constants";
+import { COMPANY } from "@/constants";
 import { useTheme } from "@/context/ThemeContext";
 import { cn } from "@/lib/utils";
 import { Mail, Phone, MapPin, ArrowRight } from "lucide-react";

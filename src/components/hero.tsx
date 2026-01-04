@@ -66,7 +66,7 @@ export const Hero = memo(() => {
       const timer = setTimeout(() => setIsLoading(false), 500);
       return () => clearTimeout(timer);
     }
-  };
+  });
 
   // Keep video always playing - never pause
   useEffect(() => {
