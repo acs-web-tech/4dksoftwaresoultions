@@ -3,6 +3,8 @@ import { PropsWithChildren, useRef, useState, memo, useCallback } from "react";
 import { TiLocationArrow } from "react-icons/ti";
 import { useNavigate } from "react-router-dom";
 import { getAnimationSettings } from "@/lib/performance";
+import { useTheme } from "@/context/ThemeContext";
+import { cn } from "@/lib/utils";
 
 interface BentoTiltProps {
   className?: string;
@@ -85,27 +87,40 @@ BentoCard.displayName = "BentoCard";
 export const Features = memo(() => {
   const navigate = useNavigate();
   const animSettings = getAnimationSettings();
+  const { isDark } = useTheme();
 
   const handleViewProducts = useCallback(() => {
     navigate('/products');
   }, [navigate]);
 
   return (
-    <section className="bg-black pb-52">
+    <section className={cn(
+      "pb-52",
+      isDark ? "bg-black" : "bg-gray-50"
+    )}>
       <div className="container mx-auto px-3 md:px-10">
         <div className="px-5 py-32">
-          <p className="font-circular-web text-lg text-blue-50">
+          <p className={cn(
+            "font-circular-web text-lg",
+            isDark ? "text-blue-50" : "text-gray-800"
+          )}>
             Our Development Solutions
           </p>
 
-          <p className="max-w-md font-circular-web text-lg text-blue-50 opacity-50">
+          <p className={cn(
+            "max-w-md font-circular-web text-lg opacity-50",
+            isDark ? "text-blue-50" : "text-gray-700"
+          )}>
             Discover our comprehensive suite of development services and products
             designed to transform your digital vision into reality with cutting-edge
             technology and innovative solutions.
           </p>
         </div>
 
-        <BentoTilt className="border-hsla relative mb-7 h-96 w-full overflow-hidden rounded-md md:h-[65vh]">
+        <BentoTilt className={cn(
+          "border-hsla relative mb-7 h-96 w-full overflow-hidden rounded-md md:h-[65vh]",
+          isDark ? "" : "shadow-lg"
+        )}>
           <BentoCard
             src={VIDEO_LINKS.feature1}
             title={
@@ -121,7 +136,10 @@ export const Features = memo(() => {
           id="nexus"
           className="grid h-[135vh] grid-cols-2 grid-rows-3 gap-7"
         >
-          <BentoTilt className="bento-tilt_1 row-span-1 md:col-span-1 md:row-span-2">
+          <BentoTilt className={cn(
+            "bento-tilt_1 row-span-1 md:col-span-1 md:row-span-2",
+            isDark ? "" : "shadow-lg"
+          )}>
             <BentoCard
               src={VIDEO_LINKS.feature2}
               title={
@@ -133,7 +151,10 @@ export const Features = memo(() => {
             />
           </BentoTilt>
 
-          <BentoTilt className="bento-tilt_1 row-span-1 ms-32 md:col-span-1 md:ms-0">
+          <BentoTilt className={cn(
+            "bento-tilt_1 row-span-1 ms-32 md:col-span-1 md:ms-0",
+            isDark ? "" : "shadow-lg"
+          )}>
             <BentoCard
               src={VIDEO_LINKS.feature3}
               title={
@@ -145,7 +166,10 @@ export const Features = memo(() => {
             />
           </BentoTilt>
 
-          <BentoTilt className="bento-tilt_1 me-14 md:col-span-1 md:me-0">
+          <BentoTilt className={cn(
+            "bento-tilt_1 me-14 md:col-span-1 md:me-0",
+            isDark ? "" : "shadow-lg"
+          )}>
             <BentoCard
               src={VIDEO_LINKS.feature4}
               title={
@@ -157,9 +181,17 @@ export const Features = memo(() => {
             />
           </BentoTilt>
 
-          <BentoTilt className="bento-tilt_2">
+          <BentoTilt className={cn(
+            "bento-tilt_2",
+            isDark ? "" : "shadow-lg"
+          )}>
             <div
-              className="flex size-full flex-col justify-between bg-violet-300 p-5 cursor-pointer hover:bg-violet-400 transition-colors duration-200"
+              className={cn(
+                "flex size-full flex-col justify-between p-5 cursor-pointer transition-colors duration-200",
+                isDark
+                  ? "bg-violet-300 hover:bg-violet-400"
+                  : "bg-violet-200 hover:bg-violet-300"
+              )}
               onClick={handleViewProducts}
             >
               <h1 className="bento-title special-font max-w-64 text-black">
@@ -170,7 +202,10 @@ export const Features = memo(() => {
             </div>
           </BentoTilt>
 
-          <BentoTilt className="bento-tilt_2">
+          <BentoTilt className={cn(
+            "bento-tilt_2",
+            isDark ? "" : "shadow-lg"
+          )}>
             <video
               src={VIDEO_LINKS.feature5}
               loop

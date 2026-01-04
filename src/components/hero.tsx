@@ -2,14 +2,16 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/all";
 import { useCallback, useEffect, useRef, useState, memo } from "react";
 import { TiLocationArrow } from "react-icons/ti";
+import { Link } from "react-router-dom";
 
 import { Button } from "./button";
-import { VIDEO_LINKS, COMPANY } from "@/constants";
-import { getAnimationSettings, isMobile } from "@/lib/performance";
+import { COMPANY } from "@/constants";
+import { isMobile } from "@/lib/performance";
 import { useTheme } from "@/context/ThemeContext";
 import { cn, hash } from "@/lib/utils";
 
-gsap.registerPlugin(ScrollTrigger);
+// Local optimized hero video
+const HERO_VIDEO = "/videos/hero-video.mp4";
 
 // Memoized loading spinner to prevent re-renders
 const LoadingSpinner = memo(({ isDark }: { isDark: boolean }) => (
@@ -30,10 +32,8 @@ LoadingSpinner.displayName = "LoadingSpinner";
 export const Hero = memo(() => {
   const [currentIndex, _] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
-  const [loadedVideos, setLoadedVideos] = useState(0);
   const [isMobileDevice, setIsMobileDevice] = useState(false);
 
-  const nextVideoRef = useRef<HTMLVideoElement>(null);
   const mainVideoRef = useRef<HTMLVideoElement>(null);
   
 
@@ -66,17 +66,34 @@ export const Hero = memo(() => {
       const timer = setTimeout(() => setIsLoading(false), 500);
       return () => clearTimeout(timer);
     }
-  }, [loadedVideos]);
+  });
 
-  // Pause videos when tab is not visible
+  // Keep video always playing - never pause
   useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (document.hidden) {
-        mainVideoRef.current?.pause();
-        nextVideoRef.current?.pause();
-      } else if (!isLoading) {
-        mainVideoRef.current?.play().catch(() => { });
+    const video = mainVideoRef.current;
+    if (!video) return;
+
+    // Function to ensure video keeps playing
+    const keepPlaying = () => {
+      if (video.paused) {
+        video.play().catch(() => { });
       }
+    };
+
+    // Check every second to ensure video is playing
+    const interval = setInterval(keepPlaying, 1000);
+
+    // Also restart on visibility change
+    const handleVisibilityChange = () => {
+      if (!document.hidden && video.paused) {
+        video.play().catch(() => { });
+      }
+    };
+
+    // Handle video ended - restart it
+    const handleEnded = () => {
+      video.currentTime = 0;
+      video.play().catch(() => { });
     };
 
     document.addEventListener("visibilitychange", handleVisibilityChange);
@@ -148,7 +165,7 @@ export const Hero = memo(() => {
   // });
 
   return (
-    <section id="hero" className="relative h-dvh w-screen overflow-x-hidden">
+    <section id="hero" className="relative h-screen w-screen overflow-hidden">
       {isLoading && <LoadingSpinner isDark={isDark} />}
 
       <div
@@ -211,21 +228,22 @@ export const Hero = memo(() => {
           />
         </div>
 
-        <h1 className={cn(
-          "special-font hero-heading absolute bottom-5 right-5 z-40",
-          isDark ? "text-blue-75" : "text-gray-200"
-        )}>
-          {COMPANY.name.split(' ')[0]}<b>.</b>{COMPANY.name.split(' ')[1] || 'Teams'}
-        </h1>
+      {/* Hero Content - Overlay */}
+      <div className="relative z-20 h-full w-full flex flex-col justify-center">
+        <div className="container mx-auto px-6 sm:px-10 lg:px-16">
+          {/* Badge */}
+          <div className="mb-6 inline-flex items-center gap-2 px-4 py-2 rounded-full border backdrop-blur-sm bg-white/10 border-white/20">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+            </span>
+            <span className="text-sm font-medium text-white">Available for Projects</span>
+          </div>
 
-        <div className="absolute left-0 top-0 z-40 size-full">
-          <div className="mt-24 px-5 sm:px-10">
-            <h1 className={cn(
-              "special-font hero-heading",
-              isDark ? "text-blue-100" : "text-gray-700"
-            )}>
-              Innov<b>a</b>tive
-            </h1>
+          {/* Main Heading */}
+          <h1 className="special-font hero-heading text-white drop-shadow-2xl">
+            Innov<b>a</b>tive
+          </h1>
 
             <p className={cn(
               "mb-5 max-w-64 font-robert-regular",
@@ -244,15 +262,39 @@ export const Hero = memo(() => {
               Our Portfolio
             </Button>
           </div>
+
+          {/* Stats row */}
+          {!isMobileDevice && (
+            <div className="flex items-center gap-10">
+              {[
+                { value: "50+", label: "Projects Delivered" },
+                { value: "99%", label: "Client Satisfaction" },
+                { value: "10+", label: "Years Experience" }
+              ].map((stat, i) => (
+                <div key={i} className="text-center">
+                  <div className="text-4xl md:text-5xl font-black text-white drop-shadow-xl">{stat.value}</div>
+                  <div className="text-sm text-white/70 mt-1">{stat.label}</div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
-      <h1 className={cn(
-        "special-font hero-heading absolute bottom-5 right-5",
-        isDark ? "text-black" : "text-gray-300"
-      )}>
-        {COMPANY.name.split(' ')[0]}<b>.</b>{COMPANY.name.split(' ')[1] || 'Teams'}
-      </h1>
+      {/* Company name watermark - bottom right */}
+      <div className="absolute bottom-8 right-8 z-30">
+        <h1 className="text-6xl md:text-8xl font-black text-white/20 tracking-tight">
+          4DK<span className="text-yellow-400/30">.</span>Teams
+        </h1>
+      </div>
+
+      {/* Scroll indicator */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-2 animate-bounce">
+        <span className="text-white/60 text-sm font-medium">Scroll to explore</span>
+        <svg className="w-6 h-6 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+        </svg>
+      </div>
     </section>
   );
 });

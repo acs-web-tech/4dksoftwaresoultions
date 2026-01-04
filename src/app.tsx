@@ -8,6 +8,8 @@ import FaqPage from "@/pages/faq-page";
 import PricingPage from "@/pages/pricing-page";
 import { ProductPage } from "@/pages/product-page";
 import ServicePage from "@/pages/service-page";
+import TermsPage from "@/pages/terms-page";
+import PrivacyPage from "@/pages/privacy-page";
 import { ThemeProvider } from "@/context/ThemeContext";
 
 const ScrollToTop = () => {
@@ -35,6 +37,8 @@ const App = () => {
             <Route path="/services" element={<ServicePage />} />
             <Route path="/pricing" element={<PricingPage />} />
             <Route path="/faq" element={<FaqPage />} />
+            <Route path="/terms" element={<TermsPage />} />
+            <Route path="/privacy" element={<PrivacyPage />} />
           </Routes>
         </div>
       </Router>

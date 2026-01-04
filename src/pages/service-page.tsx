@@ -8,6 +8,9 @@ import {
     Target, Layers, CircleDot, Star, TrendingUp, CheckCircle
 } from "lucide-react";
 import { getAnimationSettings } from "@/lib/performance";
+import { useTheme } from "@/context/ThemeContext";
+import { cn } from "@/lib/utils";
+import { COMPANY } from "@/constants";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -164,12 +167,17 @@ const comparisonFeatures = [
 ];
 
 // Enhanced Service Card with hover effects
-const ServiceCard = memo(({ service, index }: { service: typeof services[0]; index: number }) => {
+const ServiceCard = memo(({ service, index, isDark }: { service: typeof services[0]; index: number; isDark: boolean }) => {
     const Icon = service.icon;
 
     return (
         <div
-            className="service-card group relative overflow-hidden rounded-3xl border border-white/10 transition-all duration-300 hover:border-white/20"
+            className={cn(
+                "service-card group relative overflow-hidden rounded-3xl border transition-all duration-300",
+                isDark
+                    ? "border-white/10 hover:border-white/20"
+                    : "border-gray-200 hover:border-gray-300 bg-white shadow-sm"
+            )}
             style={{ opacity: 0, transform: 'translateY(40px)' }}
             data-index={index}
         >
@@ -177,7 +185,12 @@ const ServiceCard = memo(({ service, index }: { service: typeof services[0]; ind
             <div className={`absolute -inset-1 bg-gradient-to-r ${service.gradient} rounded-3xl blur-xl opacity-0 group-hover:opacity-30 transition-all duration-500`} />
 
             {/* Card content */}
-            <div className="relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm p-8 h-full">
+            <div className={cn(
+                "relative backdrop-blur-sm p-8 h-full",
+                isDark
+                    ? "bg-gradient-to-br from-white/10 to-white/5"
+                    : "bg-white"
+            )}>
                 {/* Top gradient bar */}
                 <div className={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${service.gradient}`}>
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
@@ -196,18 +209,29 @@ const ServiceCard = memo(({ service, index }: { service: typeof services[0]; ind
                     <span className={`text-xs font-semibold uppercase tracking-wider bg-gradient-to-r ${service.gradient} bg-clip-text text-transparent`}>
                         {service.tagline}
                     </span>
-                    <h3 className="text-2xl font-bold text-white mt-1">{service.title}</h3>
+                    <h3 className={cn(
+                        "text-2xl font-bold mt-1",
+                        isDark ? "text-white" : "text-gray-800"
+                    )}>{service.title}</h3>
                 </div>
 
                 {/* Description */}
-                <p className="text-gray-400 text-sm leading-relaxed mb-6">{service.description}</p>
+                <p className={cn(
+                    "text-sm leading-relaxed mb-6",
+                    isDark ? "text-gray-400" : "text-gray-600"
+                )}>{service.description}</p>
 
                 {/* Features */}
                 <div className="flex flex-wrap gap-2 mb-6">
                     {service.features.map((feat, i) => (
                         <span
                             key={i}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/5 border border-white/10 rounded-full text-xs font-medium text-gray-300 transition-all group-hover:bg-white/10"
+                            className={cn(
+                                "inline-flex items-center gap-1.5 px-3 py-1.5 border rounded-full text-xs font-medium transition-all",
+                                isDark
+                                    ? "bg-white/5 border-white/10 text-gray-300 group-hover:bg-white/10"
+                                    : "bg-gray-50 border-gray-200 text-gray-600 group-hover:bg-gray-100"
+                            )}
                         >
                             <CheckCircle className="w-3 h-3 text-emerald-400" />
                             {feat}
@@ -216,14 +240,20 @@ const ServiceCard = memo(({ service, index }: { service: typeof services[0]; ind
                 </div>
 
                 {/* Stats */}
-                <div className="flex items-center gap-6 pt-4 border-t border-white/10">
+                <div className={cn(
+                    "flex items-center gap-6 pt-4 border-t",
+                    isDark ? "border-white/10" : "border-gray-200"
+                )}>
                     <div>
-                        <div className="text-2xl font-bold text-white">{service.stats.projects}</div>
-                        <div className="text-xs text-gray-500">Projects</div>
+                        <div className={cn(
+                            "text-2xl font-bold",
+                            isDark ? "text-white" : "text-gray-800"
+                        )}>{service.stats.projects}</div>
+                        <div className={isDark ? "text-xs text-gray-500" : "text-xs text-gray-400"}>Projects</div>
                     </div>
                     <div>
                         <div className="text-2xl font-bold text-emerald-400">{service.stats.satisfaction}</div>
-                        <div className="text-xs text-gray-500">Satisfaction</div>
+                        <div className={isDark ? "text-xs text-gray-500" : "text-xs text-gray-400"}>Satisfaction</div>
                     </div>
                 </div>
             </div>
@@ -237,11 +267,13 @@ ServiceCard.displayName = "ServiceCard";
 const RiverStep = memo(({
     step,
     index,
-    isActive
+    isActive,
+    isDark
 }: {
     step: typeof processSteps[0];
     index: number;
     isActive: boolean;
+    isDark: boolean;
 }) => {
     const Icon = step.icon;
     const isLeft = index % 2 === 0;
@@ -254,10 +286,16 @@ const RiverStep = memo(({
             {/* Content Card */}
             <div className={`river-card w-full lg:w-[45%] ${isLeft ? 'lg:text-right' : 'lg:text-left'}`}>
                 <div
-                    className={`relative overflow-hidden rounded-3xl border transition-all duration-500 ${isActive
-                        ? 'border-white/30 bg-gradient-to-br from-white/15 to-white/5 shadow-2xl scale-[1.02]'
-                        : 'border-white/10 bg-gradient-to-br from-white/10 to-white/5 hover:border-white/20'
-                        }`}
+                    className={cn(
+                        "relative overflow-hidden rounded-3xl border transition-all duration-500",
+                        isActive
+                            ? isDark
+                                ? 'border-white/30 bg-gradient-to-br from-white/15 to-white/5 shadow-2xl scale-[1.02]'
+                                : 'border-gray-300 bg-white shadow-2xl scale-[1.02]'
+                            : isDark
+                                ? 'border-white/10 bg-gradient-to-br from-white/10 to-white/5 hover:border-white/20'
+                                : 'border-gray-200 bg-white hover:border-gray-300 shadow-sm'
+                    )}
                 >
                     {/* Top gradient bar */}
                     <div className={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${step.gradient}`} />
@@ -282,13 +320,20 @@ const RiverStep = memo(({
                                 <span className={`text-xs font-semibold uppercase tracking-wider bg-gradient-to-r ${step.gradient} bg-clip-text text-transparent`}>
                                     Step {step.id} • {step.duration}
                                 </span>
-                                <h3 className="text-xl font-bold text-white mt-1">{step.title}</h3>
-                                <p className="text-sm text-gray-400">{step.subtitle}</p>
+                                <h3 className={cn(
+                                    "text-xl font-bold mt-1",
+                                    isDark ? "text-white" : "text-gray-800"
+                                )}>{step.title}</h3>
+                                <p className={isDark ? "text-sm text-gray-400" : "text-sm text-gray-500"}>{step.subtitle}</p>
                             </div>
                         </div>
 
                         {/* Description */}
-                        <p className={`text-gray-300 text-sm leading-relaxed mb-4 ${isLeft ? 'lg:text-right' : ''}`}>
+                        <p className={cn(
+                            "text-sm leading-relaxed mb-4",
+                            isDark ? "text-gray-300" : "text-gray-600",
+                            isLeft ? 'lg:text-right' : ''
+                        )}>
                             {step.description}
                         </p>
 
@@ -297,10 +342,14 @@ const RiverStep = memo(({
                             {step.details.map((detail, i) => (
                                 <span
                                     key={i}
-                                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${isActive
-                                        ? `bg-gradient-to-r ${step.gradient} text-white shadow-lg`
-                                        : 'bg-white/5 border border-white/10 text-gray-300'
-                                        }`}
+                                    className={cn(
+                                        "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all",
+                                        isActive
+                                            ? `bg-gradient-to-r ${step.gradient} text-white shadow-lg`
+                                            : isDark
+                                                ? 'bg-white/5 border border-white/10 text-gray-300'
+                                                : 'bg-gray-100 border border-gray-200 text-gray-600'
+                                    )}
                                 >
                                     <CircleDot className="w-3 h-3" />
                                     {detail}
@@ -319,11 +368,18 @@ const RiverStep = memo(({
                 {/* Node */}
                 <div className="relative">
                     <div className={`absolute -inset-3 bg-gradient-to-r ${step.gradient} rounded-full blur-md opacity-50 ${isActive ? 'animate-pulse' : ''}`} />
-                    <div className={`relative w-14 h-14 rounded-full bg-gradient-to-br ${step.gradient} border-4 border-black flex items-center justify-center shadow-xl transition-transform ${isActive ? 'scale-110' : ''}`}>
+                    <div className={cn(
+                        `relative w-14 h-14 rounded-full bg-gradient-to-br ${step.gradient} border-4 flex items-center justify-center shadow-xl transition-transform`,
+                        isDark ? "border-black" : "border-white",
+                        isActive ? 'scale-110' : ''
+                    )}>
                         <Icon className="w-6 h-6 text-white" />
                     </div>
                     {/* Step number */}
-                    <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs font-bold text-gray-500">
+                    <div className={cn(
+                        "absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs font-bold",
+                        isDark ? "text-gray-500" : "text-gray-400"
+                    )}>
                         {String(step.id).padStart(2, '0')}
                     </div>
                 </div>
@@ -344,6 +400,7 @@ const ServicePage = memo(() => {
     const [activeStep, setActiveStep] = useState(0);
     const activeStepRef = useRef(0);
     const animSettings = getAnimationSettings();
+    const { isDark } = useTheme();
 
     // Separate effect for river progress tracking to avoid re-running all animations
     useEffect(() => {
@@ -363,13 +420,11 @@ const ServicePage = memo(() => {
             trigger: riverContainerRef.current,
             start: "top 60%",
             end: "bottom 40%",
-            scrub: 1.5, // Smoother scrub value
+            scrub: 1.5,
             onUpdate: (self) => {
-                // Animate the path
                 const offset = pathLength * (1 - self.progress);
                 gsap.set(riverPath, { strokeDashoffset: offset });
 
-                // Update active step with debouncing
                 const newStep = Math.min(
                     Math.floor(self.progress * processSteps.length),
                     processSteps.length - 1
@@ -386,7 +441,7 @@ const ServicePage = memo(() => {
         };
     }, [animSettings.shouldAnimate]);
 
-    // Main animations effect - runs once
+    // Main animations effect
     useEffect(() => {
         if (!animSettings.shouldAnimate) {
             gsap.set(".service-card, .river-card, .comparison-row", { opacity: 1, y: 0, x: 0, rotateX: 0 });
@@ -397,7 +452,7 @@ const ServicePage = memo(() => {
         const ctx = gsap.context(() => {
             gsap.config({ force3D: true });
 
-            // Hero animations with stagger
+            // Hero animations
             const heroTl = gsap.timeline();
             heroTl
                 .fromTo(".hero-badge",
@@ -420,7 +475,7 @@ const ServicePage = memo(() => {
                     "-=0.4"
                 );
 
-            // Scroll indicator bounce
+            // Scroll indicator
             gsap.to(".scroll-indicator", {
                 y: 15,
                 duration: 1.5,
@@ -429,7 +484,7 @@ const ServicePage = memo(() => {
                 ease: "power1.inOut"
             });
 
-            // Service cards with simpler animation (removed 3D for performance)
+            // Service cards
             gsap.utils.toArray<HTMLElement>(".service-card").forEach((card, i) => {
                 gsap.fromTo(card,
                     { opacity: 0, y: 40 },
@@ -448,7 +503,7 @@ const ServicePage = memo(() => {
                 );
             });
 
-            // Comparison rows with stagger
+            // Comparison rows
             gsap.utils.toArray<HTMLElement>(".comparison-row").forEach((row, i) => {
                 gsap.fromTo(row,
                     { opacity: 0, x: -30 },
@@ -467,7 +522,7 @@ const ServicePage = memo(() => {
                 );
             });
 
-            // River cards animation - simplified
+            // River cards
             gsap.utils.toArray<HTMLElement>(".river-card").forEach((card, i) => {
                 const isLeft = i % 2 === 0;
                 gsap.fromTo(card,
@@ -485,7 +540,6 @@ const ServicePage = memo(() => {
                     }
                 );
             });
-
         });
 
         return () => {
@@ -494,30 +548,56 @@ const ServicePage = memo(() => {
     }, [animSettings.shouldAnimate]);
 
     return (
-        <div className="min-h-screen w-screen bg-black text-white overflow-hidden">
+        <div className={cn(
+            "min-h-screen w-screen overflow-hidden",
+            isDark ? "bg-black text-white" : "bg-gray-50 text-gray-800"
+        )}>
             {/* Animated Background */}
             <div className="fixed inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-violet-900/20 via-black to-black" />
+                <div className={cn(
+                    "absolute inset-0",
+                    isDark
+                        ? "bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-violet-900/20 via-black to-black"
+                        : "bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-violet-100/30 via-gray-50 to-gray-50"
+                )} />
                 {animSettings.enableBlur && (
                     <>
-                        <div className="absolute top-1/4 left-1/4 h-96 w-96 rounded-full bg-violet-500/15 blur-3xl animate-pulse" style={{ animationDuration: '8s' }} />
-                        <div className="absolute bottom-1/4 right-1/4 h-96 w-96 rounded-full bg-blue-500/15 blur-3xl animate-pulse" style={{ animationDuration: '10s' }} />
-                        <div className="absolute top-1/2 right-1/3 h-64 w-64 rounded-full bg-emerald-500/10 blur-3xl animate-pulse" style={{ animationDuration: '12s' }} />
+                        <div className={cn(
+                            "absolute top-1/4 left-1/4 h-96 w-96 rounded-full blur-3xl animate-pulse",
+                            isDark ? "bg-violet-500/15" : "bg-violet-300/25"
+                        )} style={{ animationDuration: '8s' }} />
+                        <div className={cn(
+                            "absolute bottom-1/4 right-1/4 h-96 w-96 rounded-full blur-3xl animate-pulse",
+                            isDark ? "bg-blue-500/15" : "bg-blue-300/25"
+                        )} style={{ animationDuration: '10s' }} />
                     </>
                 )}
                 {/* Grid pattern */}
-                <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.015)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:64px_64px]" />
+                <div className={cn(
+                    "absolute inset-0",
+                    isDark
+                        ? "bg-[linear-gradient(rgba(255,255,255,0.015)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:64px_64px]"
+                        : "bg-[linear-gradient(rgba(0,0,0,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.02)_1px,transparent_1px)] bg-[size:64px_64px]"
+                )} />
             </div>
 
             {/* Hero Section */}
             <section className="relative min-h-screen flex flex-col items-center justify-center px-6 py-20">
                 <div ref={heroRef} className="relative z-10 text-center max-w-6xl mx-auto">
-                    <div className="hero-badge inline-flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-violet-500/20 to-fuchsia-500/20 border border-violet-500/30 mb-8">
+                    <div className={cn(
+                        "hero-badge inline-flex items-center gap-3 px-6 py-3 rounded-full border mb-8",
+                        isDark
+                            ? "bg-gradient-to-r from-violet-500/20 to-fuchsia-500/20 border-violet-500/30"
+                            : "bg-gradient-to-r from-violet-100 to-fuchsia-100 border-violet-200"
+                    )}>
                         <div className="relative">
                             <div className="absolute inset-0 bg-yellow-400 rounded-full blur animate-pulse" />
                             <Sparkles className="relative w-5 h-5 text-yellow-400" />
                         </div>
-                        <span className="text-sm font-semibold text-white">Premium Development Services</span>
+                        <span className={cn(
+                            "text-sm font-semibold",
+                            isDark ? "text-white" : "text-gray-800"
+                        )}>Premium Development Services by {COMPANY.name}</span>
                         <Zap className="w-4 h-4 text-violet-400" />
                     </div>
 
@@ -527,11 +607,17 @@ const ServicePage = memo(() => {
                         </span>
                     </h1>
 
-                    <p className="hero-subtitle text-xl md:text-2xl text-gray-300 mb-4 max-w-4xl mx-auto leading-relaxed">
+                    <p className={cn(
+                        "hero-subtitle text-xl md:text-2xl mb-4 max-w-4xl mx-auto leading-relaxed",
+                        isDark ? "text-gray-300" : "text-gray-600"
+                    )}>
                         End-to-end digital solutions crafted with cutting-edge technology and unmatched expertise.
                     </p>
 
-                    <p className="text-base text-gray-500 mb-12 max-w-2xl mx-auto">
+                    <p className={cn(
+                        "text-base mb-12 max-w-2xl mx-auto",
+                        isDark ? "text-gray-500" : "text-gray-500"
+                    )}>
                         From concept to deployment, we transform your vision into reality with precision and excellence.
                     </p>
 
@@ -546,13 +632,21 @@ const ServicePage = memo(() => {
                         </Link>
                         <a
                             href="#services"
-                            className="border-2 border-white/20 hover:border-white/40 text-white font-semibold py-4 px-8 rounded-full text-lg transition-all hover:bg-white/5"
+                            className={cn(
+                                "border-2 font-semibold py-4 px-8 rounded-full text-lg transition-all",
+                                isDark
+                                    ? "border-white/20 hover:border-white/40 text-white hover:bg-white/5"
+                                    : "border-gray-300 hover:border-gray-400 text-gray-700 hover:bg-gray-100"
+                            )}
                         >
                             Explore Services
                         </a>
                     </div>
 
-                    <div className="scroll-indicator flex flex-col items-center gap-2 text-white/50">
+                    <div className={cn(
+                        "scroll-indicator flex flex-col items-center gap-2",
+                        isDark ? "text-white/50" : "text-gray-400"
+                    )}>
                         <span className="text-sm">Scroll to explore</span>
                         <ChevronDown className="w-6 h-6" />
                     </div>
@@ -563,23 +657,34 @@ const ServicePage = memo(() => {
             <section id="services" className="relative py-32 px-6">
                 <div className="max-w-7xl mx-auto">
                     <div className="text-center mb-20">
-                        <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-blue-500/20 to-cyan-500/20 border border-blue-500/30 mb-8">
+                        <div className={cn(
+                            "inline-flex items-center gap-3 px-6 py-3 rounded-full border mb-8",
+                            isDark
+                                ? "bg-gradient-to-r from-blue-500/20 to-cyan-500/20 border-blue-500/30"
+                                : "bg-gradient-to-r from-blue-100 to-cyan-100 border-blue-200"
+                        )}>
                             <Layers className="w-5 h-5 text-blue-400" />
-                            <span className="text-sm font-semibold text-white">What We Offer</span>
+                            <span className={cn(
+                                "text-sm font-semibold",
+                                isDark ? "text-white" : "text-gray-800"
+                            )}>What We Offer</span>
                         </div>
                         <h2 className="text-4xl md:text-6xl font-black mb-6">
                             <span className="bg-gradient-to-r from-violet-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent">
                                 Our Expertise
                             </span>
                         </h2>
-                        <p className="text-lg text-gray-400 max-w-2xl mx-auto">
+                        <p className={cn(
+                            "text-lg max-w-2xl mx-auto",
+                            isDark ? "text-gray-400" : "text-gray-600"
+                        )}>
                             Comprehensive solutions tailored to your unique business needs
                         </p>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {services.map((service, i) => (
-                            <ServiceCard key={service.id} service={service} index={i} />
+                            <ServiceCard key={service.id} service={service} index={i} isDark={isDark} />
                         ))}
                     </div>
                 </div>
@@ -587,40 +692,75 @@ const ServicePage = memo(() => {
 
             {/* Why Choose Us - Comparison Section */}
             <section className="relative py-32 px-6">
-                <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-900/50 to-black" />
+                <div className={cn(
+                    "absolute inset-0",
+                    isDark
+                        ? "bg-gradient-to-b from-black via-gray-900/50 to-black"
+                        : "bg-gradient-to-b from-gray-50 via-white to-gray-50"
+                )} />
 
                 <div className="relative z-10 max-w-5xl mx-auto">
                     <div className="text-center mb-16">
-                        <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30 mb-8">
+                        <div className={cn(
+                            "inline-flex items-center gap-3 px-6 py-3 rounded-full border mb-8",
+                            isDark
+                                ? "bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border-yellow-500/30"
+                                : "bg-gradient-to-r from-yellow-100 to-orange-100 border-yellow-200"
+                        )}>
                             <Award className="w-5 h-5 text-yellow-400" />
-                            <span className="text-sm font-semibold text-white">The Difference</span>
+                            <span className={cn(
+                                "text-sm font-semibold",
+                                isDark ? "text-white" : "text-gray-800"
+                            )}>The Difference</span>
                         </div>
                         <h2 className="text-4xl md:text-6xl font-black mb-6">
                             <span className="bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400 bg-clip-text text-transparent">
                                 Why Choose Us?
                             </span>
                         </h2>
-                        <p className="text-lg text-gray-400 max-w-2xl mx-auto">
-                            See how we stand out from the competition
+                        <p className={cn(
+                            "text-lg max-w-2xl mx-auto",
+                            isDark ? "text-gray-400" : "text-gray-600"
+                        )}>
+                            See how {COMPANY.name} stands out from the competition
                         </p>
                     </div>
 
                     {/* Comparison Table */}
-                    <div className="relative overflow-hidden rounded-3xl border border-white/10">
-                        <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm" />
+                    <div className={cn(
+                        "relative overflow-hidden rounded-3xl border",
+                        isDark ? "border-white/10" : "border-gray-200"
+                    )}>
+                        <div className={cn(
+                            "absolute inset-0 backdrop-blur-sm",
+                            isDark
+                                ? "bg-gradient-to-br from-white/10 to-white/5"
+                                : "bg-white"
+                        )} />
 
                         {/* Header */}
-                        <div className="relative grid grid-cols-3 gap-4 p-6 border-b border-white/10 bg-white/5">
-                            <div className="text-lg font-bold text-white">Feature</div>
+                        <div className={cn(
+                            "relative grid grid-cols-3 gap-4 p-6 border-b",
+                            isDark ? "border-white/10 bg-white/5" : "border-gray-200 bg-gray-50"
+                        )}>
+                            <div className={cn(
+                                "text-lg font-bold",
+                                isDark ? "text-white" : "text-gray-800"
+                            )}>Feature</div>
                             <div className="text-center">
                                 <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 shadow-lg">
                                     <Star className="w-4 h-4 text-white fill-white" />
-                                    <span className="text-white font-bold">Us</span>
+                                    <span className="text-white font-bold">{COMPANY.name}</span>
                                 </div>
                             </div>
                             <div className="text-center">
-                                <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/10 border border-white/20">
-                                    <span className="text-gray-400 font-medium">Others</span>
+                                <div className={cn(
+                                    "inline-flex items-center gap-2 px-5 py-2.5 rounded-full border",
+                                    isDark
+                                        ? "bg-white/10 border-white/20"
+                                        : "bg-gray-100 border-gray-200"
+                                )}>
+                                    <span className={isDark ? "text-gray-400 font-medium" : "text-gray-500 font-medium"}>Others</span>
                                 </div>
                             </div>
                         </div>
@@ -629,10 +769,17 @@ const ServicePage = memo(() => {
                         {comparisonFeatures.map((item, i) => (
                             <div
                                 key={i}
-                                className={`comparison-row relative grid grid-cols-3 gap-4 p-5 border-b border-white/5 transition-colors hover:bg-white/5 ${i % 2 === 0 ? 'bg-white/[0.02]' : ''
-                                    }`}
+                                className={cn(
+                                    "comparison-row relative grid grid-cols-3 gap-4 p-5 border-b transition-colors",
+                                    isDark
+                                        ? `border-white/5 hover:bg-white/5 ${i % 2 === 0 ? 'bg-white/[0.02]' : ''}`
+                                        : `border-gray-100 hover:bg-gray-50 ${i % 2 === 0 ? 'bg-gray-50/50' : ''}`
+                                )}
                             >
-                                <div className="flex items-center gap-3 text-gray-300 font-medium">
+                                <div className={cn(
+                                    "flex items-center gap-3 font-medium",
+                                    isDark ? "text-gray-300" : "text-gray-700"
+                                )}>
                                     <Target className="w-4 h-4 text-violet-400" />
                                     {item.feature}
                                 </div>
@@ -649,8 +796,13 @@ const ServicePage = memo(() => {
                                 </div>
                                 <div className="flex justify-center">
                                     {item.others ? (
-                                        <div className="w-10 h-10 rounded-full bg-gray-500/20 border border-gray-500/30 flex items-center justify-center">
-                                            <Check className="w-5 h-5 text-gray-400" />
+                                        <div className={cn(
+                                            "w-10 h-10 rounded-full border flex items-center justify-center",
+                                            isDark
+                                                ? "bg-gray-500/20 border-gray-500/30"
+                                                : "bg-gray-200 border-gray-300"
+                                        )}>
+                                            <Check className={isDark ? "w-5 h-5 text-gray-400" : "w-5 h-5 text-gray-500"} />
                                         </div>
                                     ) : (
                                         <div className="w-10 h-10 rounded-full bg-red-500/20 border border-red-500/30 flex items-center justify-center">
@@ -672,15 +824,23 @@ const ServicePage = memo(() => {
                         ].map((stat, i) => (
                             <div
                                 key={i}
-                                className="group relative overflow-hidden p-6 rounded-2xl border border-white/10 transition-all duration-300 hover:border-white/20"
+                                className={cn(
+                                    "group relative overflow-hidden p-6 rounded-2xl border transition-all duration-300",
+                                    isDark
+                                        ? "border-white/10 hover:border-white/20"
+                                        : "border-gray-200 bg-white hover:border-gray-300 shadow-sm"
+                                )}
                             >
                                 <div className={`absolute inset-0 bg-gradient-to-br ${stat.gradient} opacity-0 group-hover:opacity-10 transition-opacity`} />
                                 <div className="relative text-center">
                                     <div className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${stat.gradient} mb-4`}>
                                         <stat.icon className="w-6 h-6 text-white" />
                                     </div>
-                                    <div className="text-4xl font-black text-white mb-1">{stat.label}</div>
-                                    <div className="text-gray-400 text-sm">{stat.desc}</div>
+                                    <div className={cn(
+                                        "text-4xl font-black mb-1",
+                                        isDark ? "text-white" : "text-gray-800"
+                                    )}>{stat.label}</div>
+                                    <div className={isDark ? "text-gray-400 text-sm" : "text-gray-500 text-sm"}>{stat.desc}</div>
                                 </div>
                             </div>
                         ))}
@@ -692,16 +852,27 @@ const ServicePage = memo(() => {
             <section className="relative py-32 px-6 overflow-hidden">
                 <div className="max-w-6xl mx-auto">
                     <div className="text-center mb-24">
-                        <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-emerald-500/20 to-teal-500/20 border border-emerald-500/30 mb-8">
+                        <div className={cn(
+                            "inline-flex items-center gap-3 px-6 py-3 rounded-full border mb-8",
+                            isDark
+                                ? "bg-gradient-to-r from-emerald-500/20 to-teal-500/20 border-emerald-500/30"
+                                : "bg-gradient-to-r from-emerald-100 to-teal-100 border-emerald-200"
+                        )}>
                             <Rocket className="w-5 h-5 text-emerald-400" />
-                            <span className="text-sm font-semibold text-white">Our Process</span>
+                            <span className={cn(
+                                "text-sm font-semibold",
+                                isDark ? "text-white" : "text-gray-800"
+                            )}>Our Process</span>
                         </div>
                         <h2 className="text-4xl md:text-6xl font-black mb-6">
                             <span className="bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent">
                                 Development Journey
                             </span>
                         </h2>
-                        <p className="text-lg text-gray-400 max-w-2xl mx-auto">
+                        <p className={cn(
+                            "text-lg max-w-2xl mx-auto",
+                            isDark ? "text-gray-400" : "text-gray-600"
+                        )}>
                             Follow the flow of our proven development process from concept to launch
                         </p>
                     </div>
@@ -730,7 +901,7 @@ const ServicePage = memo(() => {
                             <path
                                 d={`M 4 0 L 4 ${processSteps.length * 320}`}
                                 fill="none"
-                                stroke="rgba(255,255,255,0.1)"
+                                stroke={isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)"}
                                 strokeWidth="8"
                                 strokeLinecap="round"
                             />
@@ -754,6 +925,7 @@ const ServicePage = memo(() => {
                                     step={step}
                                     index={index}
                                     isActive={activeStep === index}
+                                    isDark={isDark}
                                 />
                             ))}
                         </div>
@@ -763,12 +935,23 @@ const ServicePage = memo(() => {
 
             {/* CTA Section */}
             <section className="relative py-32 px-6 overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-violet-900/30 via-fuchsia-900/20 to-pink-900/30" />
+                <div className={cn(
+                    "absolute inset-0",
+                    isDark
+                        ? "bg-gradient-to-r from-violet-900/30 via-fuchsia-900/20 to-pink-900/30"
+                        : "bg-gradient-to-r from-violet-100/50 via-fuchsia-100/50 to-pink-100/50"
+                )} />
 
                 <div className="relative z-10 max-w-5xl mx-auto text-center">
-                    <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/5 border border-white/10 mb-8">
+                    <div className={cn(
+                        "inline-flex items-center gap-3 px-6 py-3 rounded-full border mb-8",
+                        isDark ? "bg-white/5 border-white/10" : "bg-white border-gray-200 shadow-sm"
+                    )}>
                         <Globe className="w-5 h-5 text-blue-400" />
-                        <span className="text-sm font-semibold text-white">Let's Work Together</span>
+                        <span className={cn(
+                            "text-sm font-semibold",
+                            isDark ? "text-white" : "text-gray-800"
+                        )}>Let's Work Together</span>
                     </div>
 
                     <h2 className="text-5xl md:text-7xl font-black mb-8">
@@ -777,8 +960,11 @@ const ServicePage = memo(() => {
                         </span>
                     </h2>
 
-                    <p className="text-xl md:text-2xl text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed">
-                        Let's transform your ideas into reality. Get in touch with our team today.
+                    <p className={cn(
+                        "text-xl md:text-2xl mb-12 max-w-3xl mx-auto leading-relaxed",
+                        isDark ? "text-gray-300" : "text-gray-600"
+                    )}>
+                        Let's transform your ideas into reality. Get in touch with {COMPANY.name} today.
                     </p>
 
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -792,7 +978,12 @@ const ServicePage = memo(() => {
                         </Link>
                         <Link
                             to="/pricing"
-                            className="border-2 border-white/20 hover:border-white/40 text-white font-semibold py-5 px-12 rounded-full text-xl transition-all hover:bg-white/5"
+                            className={cn(
+                                "border-2 font-semibold py-5 px-12 rounded-full text-xl transition-all",
+                                isDark
+                                    ? "border-white/20 hover:border-white/40 text-white hover:bg-white/5"
+                                    : "border-gray-300 hover:border-gray-400 text-gray-700 hover:bg-gray-100"
+                            )}
                         >
                             View Pricing
                         </Link>

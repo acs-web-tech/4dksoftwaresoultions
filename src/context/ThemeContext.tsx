@@ -16,10 +16,11 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
         const stored = localStorage.getItem("4dk-theme") as Theme;
         if (stored) return stored;
 
-        if (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches) {
-            return "light";
+        // Check for system dark mode preference, otherwise default to light
+        if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+            return "dark";
         }
-        return "dark";
+        return "light"; // Default to light theme
     });
 
     const toggleTheme = useCallback(() => {

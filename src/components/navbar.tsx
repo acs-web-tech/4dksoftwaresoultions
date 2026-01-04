@@ -26,6 +26,27 @@ const AudioIndicator = memo(({ isActive }: { isActive: boolean }) => (
 
 AudioIndicator.displayName = "AudioIndicator";
 
+// Stylish 4DK Logo Component
+const Logo4DK = memo(({ isDark }: { isDark: boolean }) => (
+  <div className="flex items-center">
+    <span
+      className={cn(
+        "text-3xl font-black tracking-tight",
+        "bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 bg-clip-text text-transparent",
+        "font-serif italic"
+      )}
+      style={{
+        fontFamily: "'Georgia', 'Times New Roman', serif",
+        textShadow: isDark ? '0 0 30px rgba(139, 92, 246, 0.3)' : 'none'
+      }}
+    >
+      4DK
+    </span>
+  </div>
+));
+
+Logo4DK.displayName = "Logo4DK";
+
 // Memoized nav link
 const NavLink = memo(({ href, label, isRoutedPage, shouldUseRouter, isDark }: {
   href: string;
@@ -208,19 +229,13 @@ export const Navbar = memo(() => {
         <div className="absolute top-1/2 w-full -translate-y-1/2">
           <nav className="flex size-full items-center justify-between p-4">
             <div className="flex items-center gap-7">
+              {/* New 4DK Logo */}
               <Link
                 to="/"
                 className="transition hover:opacity-75"
                 onClick={closeMobileMenu}
               >
-                <img
-                  src="img/logo.jpeg"
-                  alt="4DK Teams Logo"
-                  className="h-10 w-10 rounded-full object-cover"
-                  loading="eager"
-                  width={40}
-                  height={40}
-                />
+                <Logo4DK isDark={isDark} />
               </Link>
 
               <Link

@@ -10,6 +10,9 @@ import {
 import { AnimatedTitle } from "./animated-title";
 import { getAnimationSettings } from "@/lib/performance";
 import { hash } from "@/lib/utils";
+import { useTheme } from "@/context/ThemeContext";
+import { cn } from "@/lib/utils";
+import { COMPANY } from "@/constants";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -91,12 +94,14 @@ const StepCard = memo(({
     step,
     index,
     isActive,
-    onActivate
+    onActivate,
+    isDark
 }: {
     step: typeof processSteps[0];
     index: number;
     isActive: boolean;
     onActivate: () => void;
+    isDark: boolean;
 }) => {
     const cardRef = useRef<HTMLDivElement>(null);
     const Icon = step.icon;
@@ -110,10 +115,16 @@ const StepCard = memo(({
             onClick={onActivate}
         >
             <div
-                className={`relative group cursor-pointer overflow-hidden rounded-3xl border transition-all duration-500 ${isActive
-                    ? 'border-white/30 bg-gradient-to-br from-white/15 to-white/5 shadow-2xl scale-[1.02]'
-                    : 'border-white/10 bg-gradient-to-br from-white/10 to-white/5 hover:border-white/20'
-                    }`}
+                className={cn(
+                    "relative group cursor-pointer overflow-hidden rounded-3xl border transition-all duration-500",
+                    isActive
+                        ? isDark
+                            ? 'border-white/30 bg-gradient-to-br from-white/15 to-white/5 shadow-2xl scale-[1.02]'
+                            : 'border-gray-300 bg-white shadow-2xl scale-[1.02]'
+                        : isDark
+                            ? 'border-white/10 bg-gradient-to-br from-white/10 to-white/5 hover:border-white/20'
+                            : 'border-gray-200 bg-white hover:border-gray-300 shadow-sm'
+                )}
             >
                 {/* Animated gradient background */}
                 <div className={`absolute inset-0 bg-gradient-to-br ${step.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`} />
@@ -143,14 +154,23 @@ const StepCard = memo(({
                     </div>
 
                     {/* Title */}
-                    <h3 className="text-2xl font-bold text-white mb-3">{step.title}</h3>
+                    <h3 className={cn(
+                        "text-2xl font-bold mb-3",
+                        isDark ? "text-white" : "text-gray-800"
+                    )}>{step.title}</h3>
 
                     {/* Description */}
-                    <p className="text-gray-400 text-sm leading-relaxed mb-4">{step.description}</p>
+                    <p className={cn(
+                        "text-sm leading-relaxed mb-4",
+                        isDark ? "text-gray-400" : "text-gray-600"
+                    )}>{step.description}</p>
 
                     {/* Expanded content */}
                     <div className={`overflow-hidden transition-all duration-500 ${isActive ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
-                        <p className="text-gray-300 text-sm leading-relaxed mb-6 border-t border-white/10 pt-4">
+                        <p className={cn(
+                            "text-sm leading-relaxed mb-6 border-t pt-4",
+                            isDark ? "text-gray-300 border-white/10" : "text-gray-600 border-gray-200"
+                        )}>
                             {step.longDescription}
                         </p>
                     </div>
@@ -160,10 +180,14 @@ const StepCard = memo(({
                         {step.details.map((detail, i) => (
                             <span
                                 key={i}
-                                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-300 ${isActive
-                                    ? `bg-gradient-to-r ${step.color} text-white shadow-lg`
-                                    : 'bg-white/5 border border-white/10 text-gray-300'
-                                    }`}
+                                className={cn(
+                                    "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-300",
+                                    isActive
+                                        ? `bg-gradient-to-r ${step.color} text-white shadow-lg`
+                                        : isDark
+                                            ? 'bg-white/5 border border-white/10 text-gray-300'
+                                            : 'bg-gray-100 border border-gray-200 text-gray-600'
+                                )}
                             >
                                 <CheckCircle className="w-3 h-3" />
                                 {detail}
@@ -172,7 +196,12 @@ const StepCard = memo(({
                     </div>
 
                     {/* Expand indicator */}
-                    <div className={`mt-4 flex items-center gap-2 text-sm transition-colors ${isActive ? 'text-white' : 'text-gray-500'}`}>
+                    <div className={cn(
+                        "mt-4 flex items-center gap-2 text-sm transition-colors",
+                        isActive
+                            ? isDark ? 'text-white' : 'text-gray-800'
+                            : isDark ? 'text-gray-500' : 'text-gray-400'
+                    )}>
                         <Target className={`w-4 h-4 transition-transform duration-300 ${isActive ? 'rotate-90' : ''}`} />
                         <span>{isActive ? 'Click to collapse' : 'Click to expand'}</span>
                     </div>
@@ -189,6 +218,7 @@ export const DevelopmentProcess = memo(() => {
     const timelineRef = useRef<HTMLDivElement>(null);
     const [activeStep, setActiveStep] = useState<number | null>(null);
     const animSettings = getAnimationSettings();
+    const { isDark } = useTheme();
 
     useGSAP(() => {
         if (!animSettings.shouldAnimate) {
@@ -306,39 +336,71 @@ export const DevelopmentProcess = memo(() => {
     };
 
     return (
-        <section id="development-process" className="relative min-h-screen w-screen bg-black py-32 overflow-hidden">
+        <section id="development-process" className={cn(
+            "relative min-h-screen w-screen py-32 overflow-hidden",
+            isDark ? "bg-black" : "bg-gray-50"
+        )}>
             {/* Animated Background */}
             <div className="absolute inset-0">
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-violet-900/20 via-black to-black" />
+                <div className={cn(
+                    "absolute inset-0",
+                    isDark
+                        ? "bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-violet-900/20 via-black to-black"
+                        : "bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-violet-100/30 via-gray-50 to-gray-50"
+                )} />
                 {animSettings.enableBlur && (
                     <>
-                        <div className="absolute top-0 left-1/4 w-96 h-96 bg-violet-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '8s' }} />
-                        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '10s' }} />
-                        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '12s' }} />
+                        <div className={cn(
+                            "absolute top-0 left-1/4 w-96 h-96 rounded-full blur-3xl animate-pulse",
+                            isDark ? "bg-violet-500/10" : "bg-violet-300/20"
+                        )} style={{ animationDuration: '8s' }} />
+                        <div className={cn(
+                            "absolute bottom-0 right-1/4 w-96 h-96 rounded-full blur-3xl animate-pulse",
+                            isDark ? "bg-blue-500/10" : "bg-blue-300/20"
+                        )} style={{ animationDuration: '10s' }} />
                     </>
                 )}
             </div>
 
             {/* Grid pattern overlay */}
-            <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:64px_64px]" />
+            <div className={cn(
+                "absolute inset-0",
+                isDark
+                    ? "bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:64px_64px]"
+                    : "bg-[linear-gradient(rgba(0,0,0,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.02)_1px,transparent_1px)] bg-[size:64px_64px]"
+            )} />
 
             <div ref={containerRef} className="relative z-10 container mx-auto px-4">
                 {/* Header */}
                 <div className="text-center mb-24">
-                    <div id="process-badge" className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-violet-500/20 to-fuchsia-500/20 border border-violet-500/30 mb-8">
+                    <div id="process-badge" className={cn(
+                        "inline-flex items-center gap-3 px-6 py-3 rounded-full border mb-8",
+                        isDark
+                            ? "bg-gradient-to-r from-violet-500/20 to-fuchsia-500/20 border-violet-500/30"
+                            : "bg-gradient-to-r from-violet-100 to-fuchsia-100 border-violet-200"
+                    )}>
                         <div className="relative">
                             <div className="absolute inset-0 bg-yellow-400 rounded-full blur animate-pulse" />
                             <Sparkles className="relative w-5 h-5 text-yellow-400" />
                         </div>
-                        <span className="text-sm font-semibold text-white">Our Development Process</span>
+                        <span className={cn(
+                            "text-sm font-semibold",
+                            isDark ? "text-white" : "text-gray-800"
+                        )}>Our Development Process</span>
                         <Zap className="w-4 h-4 text-violet-400" />
                     </div>
 
-                    <AnimatedTitle containerClass="!text-white text-center">
+                    <AnimatedTitle containerClass={cn(
+                        "text-center",
+                        isDark ? "!text-white" : "!text-gray-800"
+                    )}>
                         {"How We B<b>u</b>ild Your Vis<b>i</b>on"}
                     </AnimatedTitle>
 
-                    <p className="text-gray-400 max-w-3xl mx-auto mt-8 text-lg leading-relaxed">
+                    <p className={cn(
+                        "max-w-3xl mx-auto mt-8 text-lg leading-relaxed",
+                        isDark ? "text-gray-400" : "text-gray-600"
+                    )}>
                         A proven 7-step journey from concept to launch, designed to deliver
                         exceptional results on time and within budget
                     </p>
@@ -349,7 +411,12 @@ export const DevelopmentProcess = memo(() => {
                     {/* Central Timeline - Desktop */}
                     <div className="hidden lg:block absolute left-1/2 top-0 bottom-0 w-1 -translate-x-1/2">
                         {/* Background line */}
-                        <div className="absolute inset-0 bg-gradient-to-b from-violet-500/20 via-blue-500/20 to-emerald-500/20 rounded-full" />
+                        <div className={cn(
+                            "absolute inset-0 rounded-full",
+                            isDark
+                                ? "bg-gradient-to-b from-violet-500/20 via-blue-500/20 to-emerald-500/20"
+                                : "bg-gradient-to-b from-violet-300/30 via-blue-300/30 to-emerald-300/30"
+                        )} />
                         {/* Animated progress */}
                         <div className="timeline-progress absolute inset-0 bg-gradient-to-b from-violet-500 via-blue-500 to-emerald-500 rounded-full origin-top" style={{ transform: 'scaleY(0)' }} />
                     </div>
@@ -364,7 +431,10 @@ export const DevelopmentProcess = memo(() => {
                                         {/* Outer glow */}
                                         <div className={`absolute -inset-2 bg-gradient-to-r ${step.color} rounded-full blur-md opacity-50`} />
                                         {/* Node */}
-                                        <div className={`relative w-12 h-12 rounded-full bg-gradient-to-br ${step.color} border-4 border-black flex items-center justify-center shadow-xl`}>
+                                        <div className={cn(
+                                            `relative w-12 h-12 rounded-full bg-gradient-to-br ${step.color} border-4 flex items-center justify-center shadow-xl`,
+                                            isDark ? "border-black" : "border-white"
+                                        )}>
                                             <step.icon className="w-5 h-5 text-white" />
                                         </div>
                                         {/* Pulse ring */}
@@ -382,6 +452,7 @@ export const DevelopmentProcess = memo(() => {
                                     index={index}
                                     isActive={activeStep === index}
                                     onActivate={() => handleStepClick(index)}
+                                    isDark={isDark}
                                 />
 
                                 {/* Mobile step indicator */}
@@ -389,7 +460,12 @@ export const DevelopmentProcess = memo(() => {
                                     <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${step.color} flex items-center justify-center shadow-lg`}>
                                         <step.icon className="w-5 h-5 text-white" />
                                     </div>
-                                    <div className="flex-1 h-0.5 bg-gradient-to-r from-white/20 to-transparent" />
+                                    <div className={cn(
+                                        "flex-1 h-0.5",
+                                        isDark
+                                            ? "bg-gradient-to-r from-white/20 to-transparent"
+                                            : "bg-gradient-to-r from-gray-300 to-transparent"
+                                    )} />
                                 </div>
                             </div>
                         ))}
@@ -403,6 +479,11 @@ export const DevelopmentProcess = memo(() => {
                         <button
                         onClick={()=>hash("contact")}
                         className="group relative inline-flex items-center gap-3 bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white px-10 py-5 rounded-full font-bold text-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-violet-500/30">
+                        <p className={isDark ? "text-gray-400 text-lg" : "text-gray-500 text-lg"}>
+                            Ready to start your project with {COMPANY.name}?
+                        </p>
+                        </button>
+                        <button className="group relative inline-flex items-center gap-3 bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white px-10 py-5 rounded-full font-bold text-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-violet-500/30">
                             {/* Shine effect */}
                             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
                             <span className="relative">Start Your Journey</span>

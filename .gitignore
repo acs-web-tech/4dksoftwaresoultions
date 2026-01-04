@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Large original video file (too big for GitHub - 42MB)
+lv_0_20260102191216.mp4
